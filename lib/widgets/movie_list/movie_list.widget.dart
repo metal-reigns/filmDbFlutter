@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import '../../images.dart';
 
 class Movie {
+  final int id;
   final String imageName;
   final String title;
   final String time;
   final String description;
 
   Movie({
+    required this.id,
     required this.imageName,
     required this.title,
     required this.time,
@@ -25,25 +27,52 @@ class MovieListWidget extends StatefulWidget {
 class _MovieListWidgetState extends State<MovieListWidget> {
   final _movies = [
     Movie(
-        // imageName: 'interstellar',
+        id: 1,
         imageName: AppImages.interstellar,
         title: 'Interstellar',
         time: 'March 01, 2023',
         description: 'Awesome film from United State of America'),
     Movie(
+        id: 2,
         imageName: AppImages.lotrOne,
         title: 'The lord of the ring one',
         time: 'March 01, 2021',
         description: 'Awesome film from United State of America'),
     Movie(
+        id: 3,
         imageName: AppImages.lotrTwo,
         title: 'The lord of the ring two',
         time: 'March 01, 2022',
         description: 'Awesome film from United State of America'),
     Movie(
+        id: 4,
         imageName: AppImages.lotrThree,
         title: 'The lord of the ring three',
-        time: 'March 01, 2023',
+        time: 'March 02, 2023',
+        description: 'Awesome film from United State of America'),
+    Movie(
+        id: 5,
+        imageName: AppImages.bigMoney,
+        title: 'Большой куш',
+        time: 'March 03, 2023',
+        description: 'Awesome film from United State of America'),
+    Movie(
+        id: 6,
+        imageName: AppImages.CardAndMoney,
+        title: 'Карты, Деньги, Два ствола',
+        time: 'March 04, 2023',
+        description: 'Awesome film from United State of America'),
+    Movie(
+        id: 7,
+        imageName: AppImages.RocknRolls,
+        title: 'Rock`n Rolla',
+        time: 'March 05, 2023',
+        description: 'Awesome film from United State of America'),
+    Movie(
+        id: 8,
+        imageName: AppImages.TwoPistols,
+        title: 'Два ствола',
+        time: 'March 05, 2023',
         description: 'Awesome film from United State of America'),
   ];
 
@@ -68,6 +97,12 @@ class _MovieListWidgetState extends State<MovieListWidget> {
     super.initState();
     _filteredMovies = _movies;
     _searchController.addListener(_searchMovies);
+  }
+
+  void _onMovieTap(int index) {
+    final id = _movies[index].id;
+    Navigator.of(context)
+        .pushNamed('/main_screen/movie_details', arguments: id);
   }
 
   @override
@@ -138,7 +173,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(10),
-                      onTap: () {},
+                      onTap: (() => _onMovieTap(index)),
                     ),
                   )
                 ],
