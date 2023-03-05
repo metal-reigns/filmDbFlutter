@@ -61,7 +61,11 @@ class _TopPostersWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image(image: AssetImage(AppImages.interstellarHorizontal)),
+        Image(
+          image: AssetImage(AppImages.interstellarHorizontal),
+          fit: BoxFit.fill,
+          // width: 430,
+        ),
         Positioned(
             top: 20,
             left: 20,
