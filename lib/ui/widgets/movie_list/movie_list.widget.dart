@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../images.dart';
+
+import '../../../resoursec/images.dart';
 
 class Movie {
   final int id;
@@ -137,26 +138,26 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                     child: Row(
                       children: [
                         Image(image: AssetImage(movie.imageName)),
-                        SizedBox(width: 15),
+                        const SizedBox(width: 15),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               Text(
                                 movie.title,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                               Text(
                                 movie.time,
                                 style: TextStyle(color: Colors.grey),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              SizedBox(height: 20),
+                              const SizedBox(height: 20),
                               Text(
                                 movie.description,
                                 maxLines: 2,
@@ -165,7 +166,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                             ],
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                       ],
                     ),
                   ),

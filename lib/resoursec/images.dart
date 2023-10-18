@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class AppImages {
   static const String interstellar = 'images/interstellar.jpeg';
   static const String interstellarHorizontal =

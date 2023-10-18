@@ -22,16 +22,16 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TMDb'),
+        title: const Text('TMDb'),
       ),
       body: IndexedStack(
         index: _selectedTab,
         children: [
-          Text(
+          const Text(
             'News',
           ),
           MovieListWidget(),
-          Text(
+          const Text(
             'Serials',
           )
         ],

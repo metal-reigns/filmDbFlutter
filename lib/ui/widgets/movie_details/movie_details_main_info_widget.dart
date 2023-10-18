@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/images.dart';
-import 'package:flutter_application_2/widgets/elements/radial_percent_widget.dart';
+import 'package:flutter_application_2/resoursec/images.dart';
+import 'package:flutter_application_2/ui/widgets/elements/radial_percent_widget.dart';
 
 class MovieDetailsMainInfoWidget extends StatelessWidget {
   const MovieDetailsMainInfoWidget({super.key});
@@ -10,13 +10,13 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _TopPostersWidget(),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
+        const _TopPostersWidget(),
+        const Padding(
+          padding: EdgeInsets.all(20.0),
           child: _MovieNameWidget(),
         ),
-        _ScoreWidget(),
-        _SummaryWidget(),
+        const _ScoreWidget(),
+        const _SummaryWidget(),
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: _OverviewWidget(),
@@ -25,14 +25,14 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: _DescriptionWidget(),
         ),
-        SizedBox(height: 30),
-        _PeopleWidgets(),
+        const SizedBox(height: 30),
+        const _PeopleWidgets(),
       ],
     );
   }
 
   Text _DescriptionWidget() {
-    return Text(
+    return const Text(
       'A team of explorers travel through a wormhole in space in an attempt to ensure humanity`s survival.',
       style: TextStyle(
         color: Colors.white,
@@ -43,7 +43,7 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
   }
 
   Text _OverviewWidget() {
-    return Text(
+    return const Text(
       'Overview',
       style: TextStyle(
         color: Colors.white,
@@ -59,7 +59,7 @@ class _TopPostersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return const Stack(
       children: [
         Image(
           image: AssetImage(AppImages.interstellarHorizontal),
@@ -84,7 +84,7 @@ class _MovieNameWidget extends StatelessWidget {
     return RichText(
       maxLines: 3,
       textAlign: TextAlign.center,
-      text: TextSpan(
+      text: const TextSpan(
         children: [
           TextSpan(
               text: 'Interstellar',
@@ -114,7 +114,7 @@ class _ScoreWidget extends StatelessWidget {
       children: [
         TextButton(
             onPressed: () {},
-            child: Row(
+            child: const Row(
               children: [
                 SizedBox(
                   width: 40,
@@ -140,13 +140,14 @@ class _ScoreWidget extends StatelessWidget {
           height: 15,
         ),
         TextButton(
-            onPressed: () {},
-            child: Row(
-              children: [
-                Icon(Icons.play_arrow),
-                Text('Play Trailer'),
-              ],
-            )),
+          onPressed: () {},
+          child: const Row(
+            children: [
+              Icon(Icons.play_arrow),
+              Text('Play Trailer'),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -157,10 +158,10 @@ class _SummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
+    return const ColoredBox(
       color: Color.fromRGBO(22, 21, 25, 1.0),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 80),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 80),
         child: Text(
           'R 01.03.2023 (US) 1h49m Action, Adventure, Thriller, War',
           maxLines: 3,
