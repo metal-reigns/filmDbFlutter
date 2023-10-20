@@ -48,7 +48,7 @@ class MovieDetailsMainScreenCastWidget extends StatelessWidget {
                         clipBehavior: Clip.hardEdge,
                         child: Column(
                           children: [
-                            Image(image: AssetImage(AppImages.CardAndMoney)),
+                            Image(image: AssetImage(AppImages.cardAndMoney)),
                             Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Column(

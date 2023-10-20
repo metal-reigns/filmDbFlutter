@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../movie_list/movie_list.widget.dart';
+import 'package:flutter_application_2/ui/widgets/auth/auth_model.dart';
+import 'package:flutter_application_2/ui/widgets/main_screen/main_screen_model.dart';
+import 'package:flutter_application_2/ui/widgets/movie_list/movie_list.widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({super.key});
@@ -20,20 +22,22 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.read<MainScreenModel>(context);
+    print(model);
     return Scaffold(
       appBar: AppBar(
         title: const Text('TMDb'),
       ),
       body: IndexedStack(
         index: _selectedTab,
-        children: [
-          const Text(
+        children: const [
+          Text(
             'News',
           ),
           MovieListWidget(),
-          const Text(
+          Text(
             'Serials',
-          )
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

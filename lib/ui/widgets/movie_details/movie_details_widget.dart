@@ -19,7 +19,7 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
         title: const Text('Interstellar'),
       ),
       body: ColoredBox(
-        color: Color.fromRGBO(24, 23, 27, 1.0),
+        color: const Color.fromRGBO(24, 23, 27, 1.0),
         child: ListView(
           children: const [
             MovieDetailsMainInfoWidget(),
