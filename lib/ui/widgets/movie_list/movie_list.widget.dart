@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../resoursec/images.dart';
+import 'package:flutter_application_2/resoursec/images.dart';
+import 'package:flutter_application_2/ui/navigation/main_navigation.dart';
 
 class Movie {
   final int id;
@@ -19,7 +19,7 @@ class Movie {
 }
 
 class MovieListWidget extends StatefulWidget {
-  MovieListWidget({super.key});
+  const MovieListWidget({super.key});
 
   @override
   State<MovieListWidget> createState() => _MovieListWidgetState();
@@ -103,7 +103,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
   void _onMovieTap(int index) {
     final id = _movies[index].id;
     Navigator.of(context)
-        .pushNamed('/main_screen/movie_details', arguments: id);
+        .pushNamed(MainNavigationRouteNames.movieDetails, arguments: id);
   }
 
   @override
@@ -111,7 +111,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
     return Stack(
       children: [
         ListView.builder(
-          padding: EdgeInsets.only(top: 70),
+          padding: const EdgeInsets.only(top: 70),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           itemCount: _filteredMovies.length,
           itemExtent: 163,
@@ -125,12 +125,12 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       border: Border.all(color: Colors.black.withOpacity(0.2)),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.1),
                           blurRadius: 8,
-                          offset: Offset(0, 2),
+                          offset: const Offset(0, 2),
                         )
                       ],
                     ),
@@ -146,14 +146,15 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                               const SizedBox(height: 20),
                               Text(
                                 movie.title,
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               const SizedBox(height: 5),
                               Text(
                                 movie.time,
-                                style: TextStyle(color: Colors.grey),
+                                style: const TextStyle(color: Colors.grey),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -190,7 +191,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
               labelText: 'Search',
               filled: true,
               fillColor: Colors.white.withAlpha(235),
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
           ),
         ),

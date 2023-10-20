@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'movie_details_main_info_widget.dart';
 import 'movie_details_main_screen_cast_widget.dart';
 
