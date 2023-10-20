@@ -120,15 +120,16 @@ class _ScoreWidget extends StatelessWidget {
                   width: 40,
                   height: 40,
                   child: RadialPercentWidget(
-                      child: Text(
-                        '72',
-                        style: TextStyle(fontSize: 12),
-                      ),
-                      percent: 0.72,
-                      fillColor: Color.fromARGB(255, 10, 23, 25),
-                      freeColor: Color.fromARGB(255, 37, 203, 103),
-                      lineColor: Color.fromARGB(255, 25, 54, 31),
-                      lineWidth: 3),
+                    percent: 0.72,
+                    fillColor: Color.fromARGB(255, 10, 23, 25),
+                    freeColor: Color.fromARGB(255, 37, 203, 103),
+                    lineColor: Color.fromARGB(255, 25, 54, 31),
+                    lineWidth: 3,
+                    child: Text(
+                      '72',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
                 ),
                 SizedBox(width: 10),
                 Text('User Score'),
@@ -182,18 +183,18 @@ class _PeopleWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final nameStyle = TextStyle(
+    const nameStyle = TextStyle(
       color: Colors.white,
       fontSize: 16,
       fontWeight: FontWeight.w600,
     );
-    final roleStyle = TextStyle(
+    const roleStyle = TextStyle(
       color: Colors.white,
       fontSize: 16,
       fontWeight: FontWeight.w400,
     );
 
-    return Column(
+    return const Column(
       children: [
         Row(
           mainAxisSize: MainAxisSize.max,
