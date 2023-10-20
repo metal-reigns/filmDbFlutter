@@ -59,19 +59,19 @@ class _MovieListWidgetState extends State<MovieListWidget> {
         description: 'Awesome film from United State of America'),
     Movie(
         id: 6,
-        imageName: AppImages.CardAndMoney,
+        imageName: AppImages.cardAndMoney,
         title: 'Карты, Деньги, Два ствола',
         time: 'March 04, 2023',
         description: 'Awesome film from United State of America'),
     Movie(
         id: 7,
-        imageName: AppImages.RocknRolls,
+        imageName: AppImages.rocknRolls,
         title: 'Rock`n Rolla',
         time: 'March 05, 2023',
         description: 'Awesome film from United State of America'),
     Movie(
         id: 8,
-        imageName: AppImages.TwoPistols,
+        imageName: AppImages.twoPistols,
         title: 'Два ствола',
         time: 'March 05, 2023',
         description: 'Awesome film from United State of America'),
