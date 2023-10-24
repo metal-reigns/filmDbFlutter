@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_2/library/widgets/inherited/provider.dart';
 import 'package:flutter_application_2/ui/theme/app_button_style.dart';
 import 'package:flutter_application_2/ui/widgets/auth/auth_model.dart';
 
