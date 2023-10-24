@@ -37,8 +37,18 @@ class AuthModel extends ChangeNotifier {
         username: login,
         password: password,
       );
-    } catch (e) {
-      _errorMessage = 'Неправильный логин или пароль!';
+    } on ApiClientException catch (e) {
+      switch (e.type) {
+        case ApiClientExceptionType.Network:
+          _errorMessage = 'Сервер недоступен. Проверте подключение к сети';
+          break;
+        case ApiClientExceptionType.Auth:
+          _errorMessage = 'Неправильный логин или пароль!';
+          break;
+        case ApiClientExceptionType.Other:
+          _errorMessage = 'Произошла ошибка. Попробуйте еще раз';
+          break;
+      }
     }
     _isAuthProgress = false;
     if (_errorMessage != null) {
@@ -47,39 +57,14 @@ class AuthModel extends ChangeNotifier {
     }
 
     if (sessionId == null) {
-      _errorMessage = 'Неизвестная ошибка, поторите попытку';
+      _errorMessage = 'Неизвестная ошибка, повторите попытку';
       notifyListeners();
       return;
     }
     await _sessionDataProvider.setSessionId(sessionId);
     unawaited(
-        Navigator.of(context).pushNamed(MainNavigationRouteNames.mainScreen));
-  }
-}
-
-class NotifierProvider<Model extends ChangeNotifier> extends InheritedNotifier {
-  final Model model;
-
-  const NotifierProvider({
-    Key? key,
-    required this.model,
-    required Widget child,
-  }) : super(
-          key: key,
-          notifier: model,
-          child: child,
-        );
-
-  static Model? watch<Model extends ChangeNotifier>(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<NotifierProvider<Model>>()
-        ?.model;
-  }
-
-  static Model? read<Model extends ChangeNotifier>(BuildContext context) {
-    final widget = context
-        .getElementForInheritedWidgetOfExactType<NotifierProvider<Model>>()
-        ?.widget;
-    return widget is NotifierProvider<Model> ? widget.model : null;
+      Navigator.of(context)
+          .pushReplacementNamed(MainNavigationRouteNames.mainScreen),
+    );
   }
 }
