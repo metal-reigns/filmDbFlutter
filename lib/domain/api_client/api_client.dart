@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_application_2/domain/entity/popular_movie_response.dart';
+
 // ignore: constant_identifier_names
 enum ApiClientExceptionType { Network, Auth, Other }
 
@@ -13,8 +15,10 @@ class ApiClientException implements Exception {
 class ApiClient {
   final _client = HttpClient();
   static const _host = 'https://api.themoviedb.org/3';
-  // static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
+  static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
   static const _apiKey = '783358cd03c19d66f1a4eba9e514af35';
+
+  static String imageUrl(String path) => _imageUrl + path;
 
   Future<String> auth({
     required String username,
@@ -104,6 +108,25 @@ class ApiClient {
     return result;
   }
 
+  Future<PopularMovieResponse> popularMovie(int page, String locale) async {
+    parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final response = PopularMovieResponse.fromJson(jsonMap);
+      return response;
+    }
+
+    final result = _get(
+      '/movie/popular',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'page': page.toString(),
+        'language': locale,
+      },
+    );
+    return result;
+  }
+
   Future<String> _validateUser({
     required String username,
     required String password,
@@ -138,7 +161,6 @@ class ApiClient {
       return sessionId;
     }
 
-    ;
     final parameters = <String, dynamic>{
       'request_token': requestToken,
     };

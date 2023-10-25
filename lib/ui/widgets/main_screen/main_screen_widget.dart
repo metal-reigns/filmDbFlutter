@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/library/widgets/inherited/provider.dart';
-import 'package:flutter_application_2/ui/widgets/main_screen/main_screen_model.dart';
-import 'package:flutter_application_2/ui/widgets/movie_list/movie_list.widget.dart';
+import 'package:flutter_application_2/ui/widgets/movie_list/movie_list_model.dart';
+import 'package:flutter_application_2/ui/widgets/movie_list/movie_list_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({super.key});
@@ -11,7 +11,8 @@ class MainScreenWidget extends StatefulWidget {
 }
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
-  int _selectedTab = 1;
+  int _selectedTab = 0;
+  final movieListModel = MovieListModel();
 
   void onSelectTab(int index) {
     if (_selectedTab == index) return;
@@ -21,21 +22,30 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    movieListModel.loadMovie();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<MainScreenModel>(context);
-    print(model);
     return Scaffold(
       appBar: AppBar(
         title: const Text('TMDb'),
       ),
       body: IndexedStack(
         index: _selectedTab,
-        children: const [
-          Text(
+        children: [
+          const Text(
             'News',
           ),
-          MovieListWidget(),
-          Text(
+          NotifierProvider(
+            model: movieListModel,
+            child: const MovieListWidget(),
+          ),
+          const Text(
             'Serials',
           ),
         ],
