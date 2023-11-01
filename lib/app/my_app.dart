@@ -30,20 +30,11 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: const [
         Locale('ru', 'RU'),
-        Locale('en', ''),
+        Locale('en', 'US'),
       ],
       routes: mainNavigation.routes,
       initialRoute: mainNavigation.initialRoute(model.isAuth),
       onGenerateRoute: mainNavigation.onGenerateRoute,
-      //   onGenerateRoute: (RouteSettings settings) {
-      //     return MaterialPageRoute(builder: (context) {
-      //       return Scaffold(
-      //         body: Center(
-      //           child: Text('404 Not Found'),
-      //         ),
-      //       );
-      //     });
-      //   },
     );
   }
 }

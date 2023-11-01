@@ -30,6 +30,7 @@ class ApiClient {
       password: password,
       requestToken: token,
     );
+
     final sessionId = await _makeSession(requestToken: validToken);
     return sessionId;
   }
@@ -99,7 +100,6 @@ class ApiClient {
       return token;
     }
 
-    ;
     final result = _get(
       '/authentication/token/new',
       parser,
@@ -108,7 +108,7 @@ class ApiClient {
     return result;
   }
 
-  Future<PopularMovieResponse> popularMovie(int page, String locale) async {
+  Future<PopularMovieResponse> popularMovie(int page, String local) async {
     parser(dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
       final response = PopularMovieResponse.fromJson(jsonMap);
@@ -121,7 +121,7 @@ class ApiClient {
       <String, dynamic>{
         'api_key': _apiKey,
         'page': page.toString(),
-        'language': locale,
+        'language': local,
       },
     );
     return result;
@@ -143,6 +143,7 @@ class ApiClient {
       'password': password,
       'request_token': requestToken,
     };
+
     final result = _post(
       '/authentication/token/validate_with_login',
       parameters,
@@ -164,6 +165,7 @@ class ApiClient {
     final parameters = <String, dynamic>{
       'request_token': requestToken,
     };
+
     final result = _post(
       '/authentication/session/new',
       parameters,

@@ -27,15 +27,15 @@ class NotifierProvider<Model extends ChangeNotifier> extends InheritedNotifier {
   }
 }
 
-class Provider<Model> extends InheritedNotifier {
+class Provider<Model> extends InheritedWidget {
   final Model model;
+
   const Provider({
     Key? key,
     required this.model,
     required Widget child,
   }) : super(
           key: key,
-          // notifier: model,
           child: child,
         );
 

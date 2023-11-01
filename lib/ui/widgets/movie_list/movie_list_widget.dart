@@ -4,7 +4,7 @@ import 'package:flutter_application_2/library/widgets/inherited/provider.dart';
 import 'package:flutter_application_2/ui/widgets/movie_list/movie_list_model.dart';
 
 class MovieListWidget extends StatelessWidget {
-  const MovieListWidget({super.key});
+  const MovieListWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class MovieListWidget extends StatelessWidget {
                           color: Colors.black.withOpacity(0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
-                        )
+                        ),
                       ],
                     ),
                     clipBehavior: Clip.hardEdge,
@@ -43,7 +43,8 @@ class MovieListWidget extends StatelessWidget {
                         posterPath != null
                             ? Image.network(
                                 ApiClient.imageUrl(posterPath),
-                                width: 95,
+                                width: 100,
+                                height: 110,
                               )
                             : const SizedBox.shrink(),
                         const SizedBox(width: 15),
@@ -71,7 +72,7 @@ class MovieListWidget extends StatelessWidget {
                                 movie.overview,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -83,19 +84,19 @@ class MovieListWidget extends StatelessWidget {
                     color: Colors.transparent,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(10),
-                      onTap: model.onMovieTap(context, index),
+                      onTap: () => model.onMovieTap(context, index),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
           },
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.all(10.0),
           child: TextField(
             decoration: InputDecoration(
-              labelText: 'Search',
+              labelText: 'Поиск',
               filled: true,
               fillColor: Colors.white.withAlpha(235),
               border: const OutlineInputBorder(),

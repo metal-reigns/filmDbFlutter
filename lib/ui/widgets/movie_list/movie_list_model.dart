@@ -6,30 +6,30 @@ import 'package:intl/intl.dart';
 
 class MovieListModel extends ChangeNotifier {
   final _apiClient = ApiClient();
-  final List<Movie> _movies = [];
+  final _movies = <Movie>[];
   List<Movie> get movies => List.unmodifiable(_movies);
   late DateFormat _dateFormat;
-  String _local = '';
+  String _locale = '';
 
   String stringFromDate(DateTime? date) =>
       date != null ? _dateFormat.format(date) : '';
 
-  void setUpLocal(BuildContext context) {
-    final local = Localizations.localeOf(context).toLanguageTag();
-    if (_local == local) return;
-    _local = local;
-    _dateFormat = DateFormat.yMMMMd(local);
+  void setupLocale(BuildContext context) {
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    if (_locale == locale) return;
+    _locale = locale;
+    _dateFormat = DateFormat.yMMMMd(locale);
     _movies.clear();
-    loadMovie();
+    _loadMovies();
   }
 
-  Future<void> loadMovie() async {
-    final moviesResponse = await _apiClient.popularMovie(1, 'us-US');
+  Future<void> _loadMovies() async {
+    final moviesResponse = await _apiClient.popularMovie(1, _locale);
     _movies.addAll(moviesResponse.movies);
     notifyListeners();
   }
 
-  onMovieTap(BuildContext context, int index) {
+  void onMovieTap(BuildContext context, int index) {
     final id = _movies[index].id;
     Navigator.of(context).pushNamed(
       MainNavigationRouteNames.movieDetails,
