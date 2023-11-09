@@ -6,7 +6,7 @@ import 'package:flutter_application_2/ui/widgets/movie_list/movie_list_model.dar
 import 'package:flutter_application_2/ui/widgets/movie_list/movie_list_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
-  const MainScreenWidget({super.key});
+  const MainScreenWidget({Key? key}) : super(key: key);
 
   @override
   State<MainScreenWidget> createState() => _MainScreenWidgetState();
@@ -49,7 +49,8 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
             'News',
           ),
           NotifierProvider(
-            model: movieListModel,
+            create: () => movieListModel,
+            isManagingModel: false,
             child: const MovieListWidget(),
           ),
           const Text(
