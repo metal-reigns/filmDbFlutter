@@ -12,6 +12,9 @@ class MovieDetailsModel extends ChangeNotifier {
 
   MovieDetails? get movieDetails => _movieDetails;
 
+  String stringFromDate(DateTime? date) =>
+      date != null ? _dateFormat.format(date) : '';
+
   MovieDetailsModel(this.movieId);
 
   Future<void> setupLocale(BuildContext context) async {
