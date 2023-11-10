@@ -1,48 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/resoursec/images.dart';
+import 'package:flutter_application_2/domain/api_client/api_client.dart';
+import 'package:flutter_application_2/library/widgets/inherited/provider.dart';
 import 'package:flutter_application_2/ui/widgets/elements/radial_percent_widget.dart';
+import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_model.dart';
+import 'package:intl/intl.dart';
 
 class MovieDetailsMainInfoWidget extends StatelessWidget {
   const MovieDetailsMainInfoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _TopPostersWidget(),
-        const Padding(
+        _TopPostersWidget(),
+        Padding(
           padding: EdgeInsets.all(20.0),
           child: _MovieNameWidget(),
         ),
-        const _ScoreWidget(),
-        const _SummaryWidget(),
+        _ScoreWidget(),
+        _SummaryWidget(),
         Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: _OverviewWidget(),
         ),
         Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.all(10.0),
           child: _DescriptionWidget(),
         ),
-        const SizedBox(height: 30),
-        const _PeopleWidgets(),
+        SizedBox(height: 30),
+        _PeopleWidgets(),
       ],
     );
   }
+}
 
-  Text _DescriptionWidget() {
-    return const Text(
-      'A team of explorers travel through a wormhole in space in an attempt to ensure humanity`s survival.',
-      style: TextStyle(
+class _DescriptionWidget extends StatelessWidget {
+  const _DescriptionWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+
+    return Text(
+      model?.movieDetails?.overview ?? '',
+      style: const TextStyle(
         color: Colors.white,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ),
     );
   }
+}
 
-  Text _OverviewWidget() {
+class _OverviewWidget extends StatelessWidget {
+  const _OverviewWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return const Text(
       'Overview',
       style: TextStyle(
@@ -59,19 +74,26 @@ class _TopPostersWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Stack(
-      children: [
-        Image(
-          image: AssetImage(AppImages.interstellarHorizontal),
-          fit: BoxFit.fill,
-          // width: 430,
-        ),
-        Positioned(
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final backdropPath = model?.movieDetails?.backdropPath;
+    final posterPath = model?.movieDetails?.posterPath;
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Stack(
+        children: [
+          backdropPath != null
+              ? Image.network(ApiClient.imageUrl(backdropPath))
+              : const SizedBox.shrink(),
+          Positioned(
             top: 20,
             left: 20,
             bottom: 20,
-            child: Image(image: AssetImage(AppImages.interstellar))),
-      ],
+            child: posterPath != null
+                ? Image.network(ApiClient.imageUrl(posterPath))
+                : const SizedBox.shrink(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -81,24 +103,29 @@ class _MovieNameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-      maxLines: 3,
-      textAlign: TextAlign.center,
-      text: const TextSpan(
-        children: [
-          TextSpan(
-              text: 'Interstellar',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 17,
-                  color: Colors.white)),
-          TextSpan(
-              text: ' (2023)',
-              style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 17,
-                  color: Colors.grey)),
-        ],
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    var year = model?.movieDetails?.releaseDate?.toString();
+    year = year != null ? ' ($year)' : '';
+    return Center(
+      child: RichText(
+        maxLines: 3,
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: [
+            TextSpan(
+                text: model?.movieDetails?.title ?? '',
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    color: Colors.white)),
+            TextSpan(
+                text: year,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 17,
+                    color: Colors.grey)),
+          ],
+        ),
       ),
     );
   }
@@ -109,30 +136,35 @@ class _ScoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var voteAverage = NotifierProvider.watch<MovieDetailsModel>(context)
+            ?.movieDetails
+            ?.voteAverage ??
+        0;
+    voteAverage = voteAverage * 10;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         TextButton(
             onPressed: () {},
-            child: const Row(
+            child: Row(
               children: [
                 SizedBox(
                   width: 40,
                   height: 40,
                   child: RadialPercentWidget(
-                    percent: 0.72,
-                    fillColor: Color.fromARGB(255, 10, 23, 25),
-                    freeColor: Color.fromARGB(255, 37, 203, 103),
-                    lineColor: Color.fromARGB(255, 25, 54, 31),
+                    percent: voteAverage / 100,
+                    fillColor: const Color.fromARGB(255, 10, 23, 25),
+                    freeColor: const Color.fromARGB(255, 37, 203, 103),
+                    lineColor: const Color.fromARGB(255, 25, 54, 31),
                     lineWidth: 3,
                     child: Text(
-                      '72',
-                      style: TextStyle(fontSize: 12),
+                      voteAverage.toStringAsFixed(0),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
-                Text('User Score'),
+                const SizedBox(width: 10),
+                const Text('User Score'),
               ],
             )),
         Container(
@@ -159,15 +191,45 @@ class _SummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ColoredBox(
-      color: Color.fromRGBO(22, 21, 25, 1.0),
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    if (model == null) return const SizedBox.shrink();
+    var texts = <String>[];
+    var genresNames = <String>[];
+
+    final releaseDate = model.movieDetails?.releaseDate;
+    if (releaseDate != null) {
+      texts.add(model.stringFromDate(releaseDate));
+    }
+
+    final productionCountry = model.movieDetails?.productionCountries;
+    if (productionCountry != null && productionCountry.isNotEmpty) {
+      texts.add('(${productionCountry.first.iso})');
+    }
+
+    final runtime = model.movieDetails?.runtime ?? 0;
+    // final runtimedate = DateTime.fromMillisecondsSinceEpoch(milisececonds).toUtc();
+    final runtimedate = DateFormat('H:mm')
+        .format(DateTime.fromMillisecondsSinceEpoch(runtime * 1000 * 60));
+    texts.add(runtimedate);
+
+    final genres = model.movieDetails?.genres;
+    if (genres != null && genres.isNotEmpty) {
+      for (var genre in genres) {
+        genresNames.add(genre.name);
+      }
+      texts.add(genresNames.join(', '));
+    }
+
+    return ColoredBox(
+      color: const Color.fromARGB(255, 56, 55, 58),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 80),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Text(
-          'R 01.03.2023 (US) 1h49m Action, Adventure, Thriller, War',
+          // 'R 01.03.2023 (US) 1h49m Action, Adventure, Thriller, War',
+          texts.join(' '),
           maxLines: 3,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w400,
