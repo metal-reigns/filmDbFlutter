@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_2/domain/api_client/api_client.dart';
+import 'package:flutter_application_2/domain/entity/movie_credits.dart';
 import 'package:flutter_application_2/library/widgets/inherited/provider.dart';
 import 'package:flutter_application_2/ui/widgets/elements/radial_percent_widget.dart';
 import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_model.dart';
@@ -29,7 +30,10 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
           child: _DescriptionWidget(),
         ),
         SizedBox(height: 30),
-        _PeopleWidgets(),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: _PeopleWidgets(),
+        ),
       ],
     );
   }
@@ -245,6 +249,51 @@ class _PeopleWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final crew = model?.movieDetails?.credits.crew.take(4).toList();
+    if (crew == null || crew.isEmpty) return const SizedBox.shrink();
+    // crew = crew.length > 4 ? crew.sublist(0, 3) : crew;
+    var crewChunks = <List<Crew>>[];
+    for (var i = 0; i < crew.length; i += 2) {
+      crewChunks.add(
+        crew.sublist(i, i + 2 > crew.length ? crew.length : i + 2),
+      );
+    }
+    return Column(
+      children: crewChunks
+          .map(
+            (chunks) => Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: _PeopleWidgetRow(crew: chunks),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
+class _PeopleWidgetRow extends StatelessWidget {
+  final List<Crew> crew;
+  const _PeopleWidgetRow({super.key, required this.crew});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: crew.map((crew) => _PeoplesWidgetRowItem(crew: crew)).toList(),
+    );
+  }
+}
+
+class _PeoplesWidgetRowItem extends StatelessWidget {
+  final Crew crew;
+  const _PeoplesWidgetRowItem({
+    Key? key,
+    required this.crew,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     const nameStyle = TextStyle(
       color: Colors.white,
       fontSize: 16,
@@ -255,75 +304,20 @@ class _PeopleWidgets extends StatelessWidget {
       fontSize: 16,
       fontWeight: FontWeight.w400,
     );
-
-    return const Column(
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Christopher Nolan',
-                  style: nameStyle,
-                ),
-                Text(
-                  'Director',
-                  style: roleStyle,
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Matthew McConaughey',
-                  style: nameStyle,
-                ),
-                Text(
-                  'Stars',
-                  style: roleStyle,
-                ),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Christopher Nolan',
-                  style: nameStyle,
-                ),
-                Text(
-                  'Director',
-                  style: roleStyle,
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Matthew McConaughey',
-                  style: nameStyle,
-                ),
-                Text(
-                  'Stars',
-                  style: roleStyle,
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
+    return Expanded(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            crew.name,
+            style: nameStyle,
+          ),
+          Text(
+            crew.job,
+            style: roleStyle,
+          ),
+        ],
+      ),
     );
   }
 }
