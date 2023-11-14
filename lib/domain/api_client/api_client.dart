@@ -9,7 +9,6 @@ enum ApiClientExceptionType { Network, Auth, Other }
 
 class ApiClientException implements Exception {
   final ApiClientExceptionType type;
-
   ApiClientException(this.type);
 }
 
@@ -18,7 +17,6 @@ class ApiClient {
   static const _host = 'https://api.themoviedb.org/3';
   static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
   static const _apiKey = '783358cd03c19d66f1a4eba9e514af35';
-
   static String imageUrl(String path) => _imageUrl + path;
 
   Future<String> auth({
@@ -31,7 +29,6 @@ class ApiClient {
       password: password,
       requestToken: token,
     );
-
     final sessionId = await _makeSession(requestToken: validToken);
     return sessionId;
   }
@@ -76,13 +73,11 @@ class ApiClient {
     try {
       final url = _makeUri(path, urlParameters);
       final request = await _client.postUrl(url);
-
       request.headers.contentType = ContentType.json;
       request.write(jsonEncode(bodyParameters));
       final response = await request.close();
       final dynamic json = (await response.jsonDecode());
       _validateResponse(response, json);
-
       final result = parser(json);
       return result;
     } on SocketException {
@@ -161,6 +156,7 @@ class ApiClient {
       '/movie/$movieId',
       parser,
       <String, dynamic>{
+        'append_to_response': 'credits,videos',
         'api_key': _apiKey,
         'language': locale,
       },
@@ -184,7 +180,6 @@ class ApiClient {
       'password': password,
       'request_token': requestToken,
     };
-
     final result = _post(
       '/authentication/token/validate_with_login',
       parameters,
@@ -206,7 +201,6 @@ class ApiClient {
     final parameters = <String, dynamic>{
       'request_token': requestToken,
     };
-
     final result = _post(
       '/authentication/session/new',
       parameters,

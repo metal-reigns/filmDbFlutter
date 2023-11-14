@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_2/domain/api_client/api_client.dart';
 import 'package:flutter_application_2/domain/entity/movie_credits.dart';
 import 'package:flutter_application_2/library/widgets/inherited/provider.dart';
+import 'package:flutter_application_2/ui/navigation/main_navigation.dart';
 import 'package:flutter_application_2/ui/widgets/elements/radial_percent_widget.dart';
 import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:intl/intl.dart';
@@ -140,11 +141,14 @@ class _ScoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var voteAverage = NotifierProvider.watch<MovieDetailsModel>(context)
-            ?.movieDetails
-            ?.voteAverage ??
-        0;
+    final movieDetails =
+        NotifierProvider.watch<MovieDetailsModel>(context)?.movieDetails;
+    var voteAverage = movieDetails?.voteAverage ?? 0;
     voteAverage = voteAverage * 10;
+    final videos = movieDetails?.videos.results
+        .where((video) => video.type == 'Trailer' && video.site == 'YouTube');
+    final trailerKey = videos?.isNotEmpty == true ? videos?.first.key : null;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -176,15 +180,19 @@ class _ScoreWidget extends StatelessWidget {
           width: 1,
           height: 15,
         ),
-        TextButton(
-          onPressed: () {},
-          child: const Row(
-            children: [
-              Icon(Icons.play_arrow),
-              Text('Play Trailer'),
-            ],
-          ),
-        ),
+        trailerKey != null
+            ? TextButton(
+                onPressed: () => Navigator.of(context).pushNamed(
+                    MainNavigationRouteNames.movieTrailer,
+                    arguments: trailerKey),
+                child: const Row(
+                  children: [
+                    Icon(Icons.play_arrow),
+                    Text('Play Trailer'),
+                  ],
+                ),
+              )
+            : const SizedBox.shrink(),
       ],
     );
   }
@@ -229,7 +237,6 @@ class _SummaryWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Text(
-          // 'R 01.03.2023 (US) 1h49m Action, Adventure, Thriller, War',
           texts.join(' '),
           maxLines: 3,
           textAlign: TextAlign.center,
