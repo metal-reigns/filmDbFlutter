@@ -5,7 +5,20 @@ import 'package:flutter_application_2/domain/entity/movie_details.dart';
 import 'package:flutter_application_2/domain/entity/popular_movie_response.dart';
 
 // ignore: constant_identifier_names
-enum ApiClientExceptionType { Network, Auth, Other }
+enum ApiClientExceptionType { Network, Auth, Other, SessionExpire }
+
+enum MediaType { Movie, TV }
+
+extension MediaTypeAsString on MediaType {
+  String asString() {
+    switch (this) {
+      case MediaType.Movie:
+        return 'movie';
+      case MediaType.TV:
+        return 'tv';
+    }
+  }
+}
 
 class ApiClientException implements Exception {
   final ApiClientExceptionType type;
@@ -104,7 +117,30 @@ class ApiClient {
     return result;
   }
 
-  Future<PopularMovieResponse> popularMovie(int page, String locale) async {
+  Future<int> getAccountInfo(
+    String sessionId,
+  ) async {
+    parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final result = jsonMap['id'] as int;
+      return result;
+    }
+
+    final result = _get(
+      '/account',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'session_id': sessionId,
+      },
+    );
+    return result;
+  }
+
+  Future<PopularMovieResponse> popularMovie(
+    int page,
+    String locale,
+  ) async {
     parser(dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
       final response = PopularMovieResponse.fromJson(jsonMap);
@@ -124,7 +160,10 @@ class ApiClient {
   }
 
   Future<PopularMovieResponse> searchMovie(
-      int page, String locale, String query) async {
+    int page,
+    String locale,
+    String query,
+  ) async {
     parser(dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
       final response = PopularMovieResponse.fromJson(jsonMap);
@@ -145,7 +184,10 @@ class ApiClient {
     return result;
   }
 
-  Future<MovieDetails> movieDetails(int movieId, String locale) async {
+  Future<MovieDetails> movieDetails(
+    int movieId,
+    String locale,
+  ) async {
     parser(dynamic json) {
       final jsonMap = json as Map<String, dynamic>;
       final response = MovieDetails.fromJson(jsonMap);
@@ -159,6 +201,27 @@ class ApiClient {
         'append_to_response': 'credits,videos',
         'api_key': _apiKey,
         'language': locale,
+      },
+    );
+    return result;
+  }
+
+  Future<bool> isFavorite(
+    int movieId,
+    String sessionId,
+  ) async {
+    parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final result = jsonMap['favorite'] as bool;
+      return result;
+    }
+
+    final result = _get(
+      '/movie/$movieId/account_states',
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'session_id': sessionId,
       },
     );
     return result;
@@ -189,6 +252,36 @@ class ApiClient {
     return result;
   }
 
+  Future<String> markAsFavorite({
+    required int accountId,
+    required String sessionId,
+    required MediaType mediaType,
+    required int mediaId,
+    required bool isFavorite,
+  }) async {
+    parser(dynamic json) {
+      final jsonMap = json as Map<String, dynamic>;
+      final token = jsonMap['request_token'] as String;
+      return token;
+    }
+
+    final parameters = <String, dynamic>{
+      'media_type': mediaType.asString(),
+      'media_id': mediaId.toString(),
+      'favorite': isFavorite.toString(),
+    };
+    final result = _post(
+      '/account/$accountId/favorite',
+      parameters,
+      parser,
+      <String, dynamic>{
+        'api_key': _apiKey,
+        'session_id': sessionId,
+      },
+    );
+    return result;
+  }
+
   Future<String> _makeSession({
     required String requestToken,
   }) async {
@@ -210,12 +303,17 @@ class ApiClient {
     return result;
   }
 
-  void _validateResponse(HttpClientResponse response, dynamic json) {
+  void _validateResponse(
+    HttpClientResponse response,
+    dynamic json,
+  ) {
     if (response.statusCode == 401) {
       final dynamic status = json['status_code'];
       final code = status is int ? status : 0;
       if (code == 30) {
         throw ApiClientException(ApiClientExceptionType.Auth);
+      } else if (code == 3) {
+        throw ApiClientException(ApiClientExceptionType.SessionExpire);
       } else {
         throw ApiClientException(ApiClientExceptionType.Other);
       }
