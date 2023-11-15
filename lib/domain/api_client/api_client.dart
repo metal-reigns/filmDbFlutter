@@ -5,7 +5,7 @@ import 'package:flutter_application_2/domain/entity/movie_details.dart';
 import 'package:flutter_application_2/domain/entity/popular_movie_response.dart';
 
 // ignore: constant_identifier_names
-enum ApiClientExceptionType { Network, Auth, Other }
+enum ApiClientExceptionType { Network, Auth, Other, SessionExpire }
 
 enum MediaType { Movie, TV }
 
@@ -312,6 +312,8 @@ class ApiClient {
       final code = status is int ? status : 0;
       if (code == 30) {
         throw ApiClientException(ApiClientExceptionType.Auth);
+      } else if (code == 3) {
+        throw ApiClientException(ApiClientExceptionType.SessionExpire);
       } else {
         throw ApiClientException(ApiClientExceptionType.Other);
       }
