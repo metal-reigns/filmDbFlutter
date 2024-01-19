@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/library/widgets/inherited/provider.dart';
 import 'package:flutter_application_2/ui/theme/app_button_style.dart';
 import 'package:flutter_application_2/ui/widgets/auth/auth_model.dart';
+import 'package:provider/provider.dart';
 
-class AuthWidget extends StatefulWidget {
-  const AuthWidget({Key? key}) : super(key: key);
+class AuthWidget extends StatelessWidget {
+  const AuthWidget({super.key});
 
-  @override
-  _AuthWidgetState createState() => _AuthWidgetState();
-}
-
-class _AuthWidgetState extends State<AuthWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +22,7 @@ class _AuthWidgetState extends State<AuthWidget> {
 }
 
 class _HeaderWidget extends StatelessWidget {
-  const _HeaderWidget({Key? key}) : super(key: key);
+  const _HeaderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +66,11 @@ class _HeaderWidget extends StatelessWidget {
 }
 
 class _FormWidget extends StatelessWidget {
-  const _FormWidget({Key? key}) : super(key: key);
+  const _FormWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<AuthModel>(context);
+    final model = context.read<AuthViewModel>();
     const textStyle = TextStyle(
       fontSize: 16,
       color: Color(0xFF212529),
@@ -98,7 +93,7 @@ class _FormWidget extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         TextField(
-          controller: model?.loginTextController,
+          controller: model.loginTextController,
           decoration: textFieldDecorator,
         ),
         const SizedBox(height: 20),
@@ -108,7 +103,7 @@ class _FormWidget extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         TextField(
-          controller: model?.passwordTextController,
+          controller: model.passwordTextController,
           decoration: textFieldDecorator,
           obscureText: true,
         ),
@@ -130,15 +125,14 @@ class _FormWidget extends StatelessWidget {
 }
 
 class _AuthButtonWidget extends StatelessWidget {
-  const _AuthButtonWidget({Key? key}) : super(key: key);
+  const _AuthButtonWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<AuthModel>(context);
+    final model = context.watch<AuthViewModel>();
     const color = Color(0xFF01B4E4);
-    final onPressed =
-        model?.canStartAuth == true ? () => model?.auth(context) : null;
-    final child = model?.isAuthProgress == true
+    final onPressed = model.canStartAuth ? () => model.auth(context) : null;
+    final child = model.isAuthProgress
         ? const SizedBox(
             width: 15,
             height: 15,
@@ -166,12 +160,11 @@ class _AuthButtonWidget extends StatelessWidget {
 }
 
 class _ErrorMessageWidget extends StatelessWidget {
-  const _ErrorMessageWidget({Key? key}) : super(key: key);
+  const _ErrorMessageWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage =
-        NotifierProvider.watch<AuthModel>(context)?.errorMessage;
+    final errorMessage = context.select((AuthViewModel m) => m.errorMessage);
     if (errorMessage == null) return const SizedBox.shrink();
 
     return Padding(

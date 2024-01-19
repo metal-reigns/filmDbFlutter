@@ -41,7 +41,7 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
 }
 
 class _DescriptionWidget extends StatelessWidget {
-  const _DescriptionWidget({super.key});
+  const _DescriptionWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _DescriptionWidget extends StatelessWidget {
 }
 
 class _OverviewWidget extends StatelessWidget {
-  const _OverviewWidget({super.key});
+  const _OverviewWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class _OverviewWidget extends StatelessWidget {
 }
 
 class _TopPostersWidget extends StatelessWidget {
-  const _TopPostersWidget({super.key});
+  const _TopPostersWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +114,7 @@ class _TopPostersWidget extends StatelessWidget {
 }
 
 class _MovieNameWidget extends StatelessWidget {
-  const _MovieNameWidget({super.key});
+  const _MovieNameWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +147,7 @@ class _MovieNameWidget extends StatelessWidget {
 }
 
 class _ScoreWidget extends StatelessWidget {
-  const _ScoreWidget({super.key});
+  const _ScoreWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +209,7 @@ class _ScoreWidget extends StatelessWidget {
 }
 
 class _SummaryWidget extends StatelessWidget {
-  const _SummaryWidget({super.key});
+  const _SummaryWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -262,7 +262,7 @@ class _SummaryWidget extends StatelessWidget {
 }
 
 class _PeopleWidgets extends StatelessWidget {
-  const _PeopleWidgets({super.key});
+  const _PeopleWidgets({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +291,7 @@ class _PeopleWidgets extends StatelessWidget {
 
 class _PeopleWidgetRow extends StatelessWidget {
   final List<Crew> crew;
-  const _PeopleWidgetRow({super.key, required this.crew});
+  const _PeopleWidgetRow({required this.crew, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
