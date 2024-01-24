@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/domain/api_client/api_client.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+
+import 'package:flutter_application_2/domain/api_client/image_downloader.dart';
 import 'package:flutter_application_2/domain/entity/movie_credits.dart';
-import 'package:flutter_application_2/library/widgets/inherited/provider.dart';
 import 'package:flutter_application_2/ui/navigation/main_navigation.dart';
 import 'package:flutter_application_2/ui/widgets/elements/radial_percent_widget.dart';
 import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_model.dart';
-import 'package:intl/intl.dart';
 
 class MovieDetailsMainInfoWidget extends StatelessWidget {
   const MovieDetailsMainInfoWidget({super.key});
@@ -41,14 +42,15 @@ class MovieDetailsMainInfoWidget extends StatelessWidget {
 }
 
 class _DescriptionWidget extends StatelessWidget {
-  const _DescriptionWidget({Key? key}) : super(key: key);
+  const _DescriptionWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieDetailsModel>(context);
+    final overview = context
+        .select((MovieDetailsModel model) => model.movieDetails?.overview);
 
     return Text(
-      model?.movieDetails?.overview ?? '',
+      overview ?? '',
       style: const TextStyle(
         color: Colors.white,
         fontSize: 16,
@@ -59,7 +61,7 @@ class _DescriptionWidget extends StatelessWidget {
 }
 
 class _OverviewWidget extends StatelessWidget {
-  const _OverviewWidget({Key? key}) : super(key: key);
+  const _OverviewWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,34 +77,36 @@ class _OverviewWidget extends StatelessWidget {
 }
 
 class _TopPostersWidget extends StatelessWidget {
-  const _TopPostersWidget({Key? key}) : super(key: key);
+  const _TopPostersWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieDetailsModel>(context);
-    final backdropPath = model?.movieDetails?.backdropPath;
-    final posterPath = model?.movieDetails?.posterPath;
+    final model = context.read<MovieDetailsModel>();
+    final movieDetails =
+        context.select((MovieDetailsModel model) => model.movieDetails);
+    final backdropPath = movieDetails?.backdropPath;
+    final posterPath = movieDetails?.posterPath;
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Stack(
         children: [
           backdropPath != null
-              ? Image.network(ApiClient.imageUrl(backdropPath))
+              ? Image.network(ImageDownloader.imageUrl(backdropPath))
               : const SizedBox.shrink(),
           Positioned(
             top: 20,
             left: 20,
             bottom: 20,
             child: posterPath != null
-                ? Image.network(ApiClient.imageUrl(posterPath))
+                ? Image.network(ImageDownloader.imageUrl(posterPath))
                 : const SizedBox.shrink(),
           ),
           Positioned(
             top: 5,
             right: 5,
             child: IconButton(
-              onPressed: () => model?.toggleFavorite(),
-              icon: Icon(model?.isFavorite == true
+              onPressed: () => model.toggleFavorite(context),
+              icon: Icon(model.isFavorite == true
                   ? Icons.favorite
                   : Icons.favorite_outline),
             ),
@@ -114,12 +118,13 @@ class _TopPostersWidget extends StatelessWidget {
 }
 
 class _MovieNameWidget extends StatelessWidget {
-  const _MovieNameWidget({Key? key}) : super(key: key);
+  const _MovieNameWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieDetailsModel>(context);
-    var year = model?.movieDetails?.releaseDate?.toString();
+    final model = context.read()<MovieDetailsModel>();
+    var year = context.select((MovieDetailsModel model) =>
+        model.movieDetails?.releaseDate?.year.toString());
     year = year != null ? ' ($year)' : '';
     return Center(
       child: RichText(
@@ -128,7 +133,7 @@ class _MovieNameWidget extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-                text: model?.movieDetails?.title ?? '',
+                text: model.movieDetails?.title ?? '',
                 style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 17,
@@ -147,12 +152,11 @@ class _MovieNameWidget extends StatelessWidget {
 }
 
 class _ScoreWidget extends StatelessWidget {
-  const _ScoreWidget({Key? key}) : super(key: key);
+  const _ScoreWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final movieDetails =
-        NotifierProvider.watch<MovieDetailsModel>(context)?.movieDetails;
+    final movieDetails = context.watch<MovieDetailsModel>().movieDetails;
     var voteAverage = movieDetails?.voteAverage ?? 0;
     voteAverage = voteAverage * 10;
     final videos = movieDetails?.videos.results
@@ -209,12 +213,11 @@ class _ScoreWidget extends StatelessWidget {
 }
 
 class _SummaryWidget extends StatelessWidget {
-  const _SummaryWidget({Key? key}) : super(key: key);
+  const _SummaryWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieDetailsModel>(context);
-    if (model == null) return const SizedBox.shrink();
+    final model = context.read()<MovieDetailsModel>();
     var texts = <String>[];
     var genresNames = <String>[];
 
@@ -229,7 +232,6 @@ class _SummaryWidget extends StatelessWidget {
     }
 
     final runtime = model.movieDetails?.runtime ?? 0;
-    // final runtimedate = DateTime.fromMillisecondsSinceEpoch(milisececonds).toUtc();
     final runtimedate = DateFormat('H:mm')
         .format(DateTime.fromMillisecondsSinceEpoch(runtime * 1000 * 60));
     texts.add(runtimedate);
@@ -262,14 +264,14 @@ class _SummaryWidget extends StatelessWidget {
 }
 
 class _PeopleWidgets extends StatelessWidget {
-  const _PeopleWidgets({Key? key}) : super(key: key);
+  const _PeopleWidgets({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieDetailsModel>(context);
-    final crew = model?.movieDetails?.credits.crew.take(4).toList();
+    final movieDetails =
+        context.select((MovieDetailsModel model) => model.movieDetails);
+    final crew = movieDetails?.credits.crew.take(4).toList();
     if (crew == null || crew.isEmpty) return const SizedBox.shrink();
-    // crew = crew.length > 4 ? crew.sublist(0, 3) : crew;
     var crewChunks = <List<Crew>>[];
     for (var i = 0; i < crew.length; i += 2) {
       crewChunks.add(
@@ -291,7 +293,7 @@ class _PeopleWidgets extends StatelessWidget {
 
 class _PeopleWidgetRow extends StatelessWidget {
   final List<Crew> crew;
-  const _PeopleWidgetRow({required this.crew, Key? key}) : super(key: key);
+  const _PeopleWidgetRow({required this.crew, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -305,9 +307,9 @@ class _PeopleWidgetRow extends StatelessWidget {
 class _PeoplesWidgetRowItem extends StatelessWidget {
   final Crew crew;
   const _PeoplesWidgetRowItem({
-    Key? key,
+    super.key,
     required this.crew,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

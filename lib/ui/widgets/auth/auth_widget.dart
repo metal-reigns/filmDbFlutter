@@ -160,7 +160,7 @@ class _AuthButtonWidget extends StatelessWidget {
 }
 
 class _ErrorMessageWidget extends StatelessWidget {
-  const _ErrorMessageWidget({super.key});
+  const _ErrorMessageWidget();
 
   @override
   Widget build(BuildContext context) {
