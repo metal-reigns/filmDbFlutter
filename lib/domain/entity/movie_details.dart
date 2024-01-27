@@ -1,6 +1,6 @@
-import 'package:flutter_application_2/domain/entity/movie_credits.dart';
-import 'package:flutter_application_2/domain/entity/movie_date_parser.dart';
-import 'package:flutter_application_2/domain/entity/movie_videos.dart';
+import 'package:flutter_app_movie_db/domain/entity/movie_date_parser.dart';
+import 'package:flutter_app_movie_db/domain/entity/movie_details_credits.dart';
+import 'package:flutter_app_movie_db/domain/entity/movie_details_videos.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'movie_details.g.dart';
@@ -22,7 +22,7 @@ class MovieDetails {
   final String? posterPath;
   final List<ProductionCompanie> productionCompanies;
   final List<ProductionCountrie> productionCountries;
-  @JsonKey(fromJson: parseDateFromString)
+  @JsonKey(fromJson: parseMovieDateFromString)
   final DateTime? releaseDate;
   final int revenue;
   final int? runtime;
@@ -33,8 +33,8 @@ class MovieDetails {
   final bool video;
   final double voteAverage;
   final int voteCount;
-  final MovieCredits credits;
-  final MovieVideos videos;
+  final MovieDetailsCredits credits;
+  final MovieDetailsVideos videos;
   MovieDetails({
     required this.adult,
     required this.backdropPath,
@@ -67,6 +67,7 @@ class MovieDetails {
 
   factory MovieDetails.fromJson(Map<String, dynamic> json) =>
       _$MovieDetailsFromJson(json);
+
   Map<String, dynamic> toJson() => _$MovieDetailsToJson(this);
 }
 
@@ -76,6 +77,7 @@ class BelongsToCollection {
 
   factory BelongsToCollection.fromJson(Map<String, dynamic> json) =>
       _$BelongsToCollectionFromJson(json);
+
   Map<String, dynamic> toJson() => _$BelongsToCollectionToJson(this);
 }
 
@@ -89,13 +91,14 @@ class Genre {
   });
 
   factory Genre.fromJson(Map<String, dynamic> json) => _$GenreFromJson(json);
+
   Map<String, dynamic> toJson() => _$GenreToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
 class ProductionCompanie {
   final int id;
-  final String logoPath;
+  final String? logoPath;
   final String name;
   final String originCountry;
   ProductionCompanie({
@@ -107,6 +110,7 @@ class ProductionCompanie {
 
   factory ProductionCompanie.fromJson(Map<String, dynamic> json) =>
       _$ProductionCompanieFromJson(json);
+
   Map<String, dynamic> toJson() => _$ProductionCompanieToJson(this);
 }
 
@@ -122,6 +126,7 @@ class ProductionCountrie {
 
   factory ProductionCountrie.fromJson(Map<String, dynamic> json) =>
       _$ProductionCountrieFromJson(json);
+
   Map<String, dynamic> toJson() => _$ProductionCountrieToJson(this);
 }
 
@@ -135,8 +140,8 @@ class SpokenLanguage {
     required this.iso,
     required this.name,
   });
-
   factory SpokenLanguage.fromJson(Map<String, dynamic> json) =>
       _$SpokenLanguageFromJson(json);
+
   Map<String, dynamic> toJson() => _$SpokenLanguageToJson(this);
 }

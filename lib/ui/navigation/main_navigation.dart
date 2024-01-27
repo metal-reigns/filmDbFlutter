@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/domain/factories/screen_factory.dart';
+import 'package:flutter_app_movie_db/domain/factories/screen_factory.dart';
 
 abstract class MainNavigationRouteNames {
   static const loaderWidget = '/';
@@ -23,7 +23,7 @@ class MainNavigation {
         final arguments = settings.arguments;
         final movieId = arguments is int ? arguments : 0;
         return MaterialPageRoute(
-          builder: (_) => _screenFactory.makeMovideDetails(movieId),
+          builder: (_) => _screenFactory.makeMovieDetails(movieId),
         );
       case MainNavigationRouteNames.movieTrailer:
         final arguments = settings.arguments;

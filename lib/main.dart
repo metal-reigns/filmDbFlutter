@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/app/my_app.dart';
+import 'package:flutter_app_movie_db/ui/widgets/app/my_app.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   const app = MyApp();
   runApp(app);
 }

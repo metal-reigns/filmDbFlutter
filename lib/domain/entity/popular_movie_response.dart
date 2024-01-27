@@ -1,4 +1,4 @@
-import 'package:flutter_application_2/domain/entity/movie.dart';
+import 'package:flutter_app_movie_db/domain/entity/movie.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'popular_movie_response.g.dart';

@@ -7,9 +7,7 @@ class LoaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: CircularProgressIndicator(
-          backgroundColor: Colors.black26,
-        ),
+        child: CircularProgressIndicator(),
       ),
     );
   }

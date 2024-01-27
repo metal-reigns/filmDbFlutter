@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/ui/widgets/auth/auth_model.dart';
-import 'package:flutter_application_2/ui/widgets/auth/auth_widget.dart';
-import 'package:flutter_application_2/ui/widgets/loader/loader_view_model.dart';
-import 'package:flutter_application_2/ui/widgets/loader/loader_widget.dart';
-import 'package:flutter_application_2/ui/widgets/main_screen/main_screen_widget.dart';
-import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_model.dart';
-import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_widget.dart';
-import 'package:flutter_application_2/ui/widgets/movie_list/movie_list_model.dart';
-import 'package:flutter_application_2/ui/widgets/movie_list/movie_list_widget.dart';
-import 'package:flutter_application_2/ui/widgets/movie_trailer/movie_trailer_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/auth/auth_model.dart';
+import 'package:flutter_app_movie_db/ui/widgets/auth/auth_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/loader/loader_view_model.dart';
+import 'package:flutter_app_movie_db/ui/widgets/loader/loader_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/main_screen/main_screen_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_details/movie_details_model.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_details/movie_details_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_list/movie_list_model.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_list/movie_list_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_trailer/movie_trailer_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/news/new_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/tv_show_list/tv_show_list_widget.dart';
 import 'package:provider/provider.dart';
 
 class ScreenFactory {
@@ -29,7 +31,7 @@ class ScreenFactory {
     return const MainScreenWidget();
   }
 
-  Widget makeMovideDetails(int movieId) {
+  Widget makeMovieDetails(int movieId) {
     return ChangeNotifierProvider(
       create: (_) => MovieDetailsModel(movieId),
       child: const MovieDetailsWidget(),
@@ -37,12 +39,14 @@ class ScreenFactory {
   }
 
   Widget makeMovieTrailer(String youTubeKey) {
-    return MovieTrailerWidget(youTubeKey: youTubeKey);
+    return MovieTrailerWidget(
+      youTubeKey: youTubeKey,
+    );
   }
 
-  // Widget makeNewsList() {
-  //   retrun const NewsWidget();
-  // }
+  Widget makeNewsList() {
+    return const NewsWidget();
+  }
 
   Widget makeMovieList() {
     return ChangeNotifierProvider(
@@ -51,7 +55,7 @@ class ScreenFactory {
     );
   }
 
-// Widget makeTVShowList() {
-//   retrun const NewsWidget();
-// }
+  Widget makeTWShowList() {
+    return const TVShowListWidget();
+  }
 }

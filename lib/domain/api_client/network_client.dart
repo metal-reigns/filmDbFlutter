@@ -1,8 +1,8 @@
-import 'dart:io';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:flutter_application_2/configuration.dart';
-import 'package:flutter_application_2/domain/api_client/api_client_exception.dart';
+import 'package:flutter_app_movie_db/configuration/configuration.dart';
+import 'package:flutter_app_movie_db/domain/api_client/api_client_exception.dart';
 
 class NetworkClient {
   final _client = HttpClient();
@@ -47,33 +47,32 @@ class NetworkClient {
     try {
       final url = _makeUri(path, urlParameters);
       final request = await _client.postUrl(url);
+
       request.headers.contentType = ContentType.json;
       request.write(jsonEncode(bodyParameters));
       final response = await request.close();
       final dynamic json = (await response.jsonDecode());
       _validateResponse(response, json);
+
       final result = parser(json);
       return result;
     } on SocketException {
       throw ApiClientException(ApiClientExceptionType.network);
     } on ApiClientException {
       rethrow;
-    } catch (_) {
+    } catch (e) {
       throw ApiClientException(ApiClientExceptionType.other);
     }
   }
 
-  void _validateResponse(
-    HttpClientResponse response,
-    dynamic json,
-  ) {
+  void _validateResponse(HttpClientResponse response, dynamic json) {
     if (response.statusCode == 401) {
       final dynamic status = json['status_code'];
       final code = status is int ? status : 0;
       if (code == 30) {
         throw ApiClientException(ApiClientExceptionType.auth);
       } else if (code == 3) {
-        throw ApiClientException(ApiClientExceptionType.sessionExpire);
+        throw ApiClientException(ApiClientExceptionType.sessionExpired);
       } else {
         throw ApiClientException(ApiClientExceptionType.other);
       }

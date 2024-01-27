@@ -1,5 +1,5 @@
-import 'package:flutter_application_2/configuration.dart';
-import 'package:flutter_application_2/domain/api_client/network_client.dart';
+import 'package:flutter_app_movie_db/configuration/configuration.dart';
+import 'package:flutter_app_movie_db/domain/api_client/network_client.dart';
 
 class AuthApiClient {
   final _networkClient = NetworkClient();

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/domain/api_client/image_downloader.dart';
-import 'package:flutter_application_2/ui/widgets/movie_list/movie_list_model.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_app_movie_db/domain/api_client/image_downloader.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_list/movie_list_model.dart';
 
 class MovieListWidget extends StatefulWidget {
   const MovieListWidget({super.key});
 
   @override
-  State<MovieListWidget> createState() => _MovieListWidgetState();
+  _MovieListWidgetState createState() => _MovieListWidgetState();
 }
 
 class _MovieListWidgetState extends State<MovieListWidget> {
@@ -15,7 +15,8 @@ class _MovieListWidgetState extends State<MovieListWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    context.read<MovieListViewModel>().setupLocale(context);
+    final locale = Localizations.localeOf(context);
+    context.read<MovieListViewModel>().setupLocale(locale);
   }
 
   @override
@@ -34,13 +35,13 @@ class _SearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read()<MovieListViewModel>();
+    final model = context.read<MovieListViewModel>();
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: TextField(
-        onChanged: model.searchMovies,
+        onChanged: model.searchMovie,
         decoration: InputDecoration(
-          labelText: 'Поиск',
+          labelText: 'Search',
           filled: true,
           fillColor: Colors.white.withAlpha(235),
           border: const OutlineInputBorder(),
@@ -51,9 +52,7 @@ class _SearchWidget extends StatelessWidget {
 }
 
 class _MovieListWidget extends StatelessWidget {
-  const _MovieListWidget({
-    super.key,
-  });
+  const _MovieListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +63,7 @@ class _MovieListWidget extends StatelessWidget {
       itemCount: model.movies.length,
       itemExtent: 163,
       itemBuilder: (BuildContext context, int index) {
-        model.showMovieAtIndex(index);
-
+        model.showedMovieAtIndex(index);
         return _MovieListRowWidget(index: index);
       },
     );
@@ -74,11 +72,14 @@ class _MovieListWidget extends StatelessWidget {
 
 class _MovieListRowWidget extends StatelessWidget {
   final int index;
-  const _MovieListRowWidget({super.key, required this.index});
+  const _MovieListRowWidget({
+    super.key,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final model = context.read()<MovieListViewModel>();
+    final model = context.read<MovieListViewModel>();
     final movie = model.movies[index];
     final posterPath = movie.posterPath;
     return Padding(
@@ -104,8 +105,7 @@ class _MovieListRowWidget extends StatelessWidget {
                 if (posterPath != null)
                   Image.network(
                     ImageDownloader.imageUrl(posterPath),
-                    width: 100,
-                    height: 110,
+                    width: 95,
                   ),
                 const SizedBox(width: 15),
                 Expanded(

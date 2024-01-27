@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/ui/theme/app_button_style.dart';
-import 'package:flutter_application_2/ui/widgets/auth/auth_model.dart';
+import 'package:flutter_app_movie_db/ui/theme/app_button_style.dart';
+import 'package:flutter_app_movie_db/ui/widgets/auth/auth_model.dart';
 import 'package:provider/provider.dart';
 
 class AuthWidget extends StatelessWidget {

@@ -16,16 +16,16 @@ class Paginator<T> {
   final _data = <T>[];
   late int _currentPage;
   late int _totalPage;
-  var _isLoadingInProgress = false;
+  var _isLoadingInProgres = false;
   final PaginatorLoad<T> load;
+
+  List<T> get data => _data;
 
   Paginator(this.load);
 
-  get data => _data;
-
   Future<void> loadNextPage() async {
-    if (_isLoadingInProgress || _currentPage >= _totalPage) return;
-    _isLoadingInProgress = true;
+    if (_isLoadingInProgres || _currentPage >= _totalPage) return;
+    _isLoadingInProgres = true;
     final nextPage = _currentPage + 1;
 
     try {
@@ -33,9 +33,9 @@ class Paginator<T> {
       _data.addAll(result.data);
       _currentPage = result.currentPage;
       _totalPage = result.totalPage;
-      _isLoadingInProgress = false;
+      _isLoadingInProgres = false;
     } catch (e) {
-      _isLoadingInProgress = false;
+      _isLoadingInProgres = false;
     }
   }
 

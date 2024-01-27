@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_application_2/domain/services/auth_service.dart';
-import 'package:flutter_application_2/ui/navigation/main_navigation.dart';
+import 'package:flutter_app_movie_db/domain/services/auth_service.dart';
+import 'package:flutter_app_movie_db/ui/navigation/main_navigation.dart';
 
 class LoaderViewModel {
   final BuildContext context;

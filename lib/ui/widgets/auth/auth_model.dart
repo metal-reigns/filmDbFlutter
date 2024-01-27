@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/domain/api_client/api_client_exception.dart';
-import 'package:flutter_application_2/domain/services/auth_service.dart';
-import 'package:flutter_application_2/ui/navigation/main_navigation.dart';
+import 'package:flutter_app_movie_db/domain/api_client/api_client_exception.dart';
+import 'package:flutter_app_movie_db/domain/services/auth_service.dart';
+import 'package:flutter_app_movie_db/ui/navigation/main_navigation.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final _authService = AuthService();
@@ -14,7 +14,7 @@ class AuthViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  final _isAuthProgress = false;
+  bool _isAuthProgress = false;
   bool get canStartAuth => !_isAuthProgress;
   bool get isAuthProgress => _isAuthProgress;
 
@@ -30,10 +30,9 @@ class AuthViewModel extends ChangeNotifier {
           return 'Сервер недоступен. Проверте подключение к сети';
         case ApiClientExceptionType.auth:
           return 'Неправильный логин или пароль!';
+        case ApiClientExceptionType.sessionExpired:
         case ApiClientExceptionType.other:
           return 'Произошла ошибка. Попробуйте еще раз';
-        case ApiClientExceptionType.sessionExpire:
-          return 'Разрыв соединения';
       }
     } catch (e) {
       return 'Неизвестная ошибка, повторите попытку';
@@ -59,7 +58,7 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  void _updateState(String? errorMessage, bool _isAuthProgress) {
+  void _updateState(String? errorMessage, bool isAuthProgress) {
     if (_errorMessage == errorMessage && _isAuthProgress == isAuthProgress) {
       return;
     }

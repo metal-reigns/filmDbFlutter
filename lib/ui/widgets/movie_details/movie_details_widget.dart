@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_main_info_widget.dart';
-import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_main_screen_cast_widget.dart';
-import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:provider/provider.dart';
+
+import 'package:flutter_app_movie_db/ui/widgets/movie_details/movie_details_main_info_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_details/movie_details_main_screen_cast_widget.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_details/movie_details_model.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
   const MovieDetailsWidget({super.key});
@@ -15,7 +16,11 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    context.read<MovieDetailsModel>().setupLocale(context);
+
+    final locale = Localizations.localeOf(context);
+    Future.microtask(
+      () => context.read<MovieDetailsModel>().setupLocale(context, locale),
+    );
   }
 
   @override

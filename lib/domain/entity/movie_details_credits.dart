@@ -1,24 +1,24 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'movie_credits.g.dart';
+part 'movie_details_credits.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
-class MovieCredits {
-  final List<Cast> cast;
-  final List<Crew> crew;
-
-  MovieCredits({
+class MovieDetailsCredits {
+  final List<Actor> cast;
+  final List<Employee> crew;
+  MovieDetailsCredits({
     required this.cast,
     required this.crew,
   });
 
-  factory MovieCredits.fromJson(Map<String, dynamic> json) =>
-      _$MovieCreditsFromJson(json);
-  Map<String, dynamic> toJson() => _$MovieCreditsToJson(this);
+  factory MovieDetailsCredits.fromJson(Map<String, dynamic> json) =>
+      _$MovieDetailsCreditsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MovieDetailsCreditsToJson(this);
 }
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Cast {
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
+class Actor {
   final bool adult;
   final int? gender;
   final int id;
@@ -31,8 +31,7 @@ class Cast {
   final String character;
   final String creditId;
   final int order;
-
-  Cast({
+  Actor({
     required this.adult,
     required this.gender,
     required this.id,
@@ -47,12 +46,13 @@ class Cast {
     required this.order,
   });
 
-  factory Cast.fromJson(Map<String, dynamic> json) => _$CastFromJson(json);
-  Map<String, dynamic> toJson() => _$CastToJson(this);
+  factory Actor.fromJson(Map<String, dynamic> json) => _$ActorFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ActorToJson(this);
 }
 
-@JsonSerializable(fieldRename: FieldRename.snake)
-class Crew {
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
+class Employee {
   final bool adult;
   final int? gender;
   final int id;
@@ -64,8 +64,7 @@ class Crew {
   final String creditId;
   final String department;
   final String job;
-
-  Crew({
+  Employee({
     required this.adult,
     required this.gender,
     required this.id,
@@ -79,6 +78,8 @@ class Crew {
     required this.job,
   });
 
-  factory Crew.fromJson(Map<String, dynamic> json) => _$CrewFromJson(json);
-  Map<String, dynamic> toJson() => _$CrewToJson(this);
+  factory Employee.fromJson(Map<String, dynamic> json) =>
+      _$EmployeeFromJson(json);
+
+  Map<String, dynamic> toJson() => _$EmployeeToJson(this);
 }

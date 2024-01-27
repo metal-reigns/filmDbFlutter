@@ -1,4 +1,4 @@
-enum ApiClientExceptionType { network, auth, other, sessionExpire }
+enum ApiClientExceptionType { network, auth, other, sessionExpired }
 
 class ApiClientException implements Exception {
   final ApiClientExceptionType type;

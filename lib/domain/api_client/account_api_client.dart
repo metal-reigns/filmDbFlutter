@@ -1,5 +1,5 @@
-import 'package:flutter_application_2/configuration.dart';
-import 'package:flutter_application_2/domain/api_client/network_client.dart';
+import 'package:flutter_app_movie_db/configuration/configuration.dart';
+import 'package:flutter_app_movie_db/domain/api_client/network_client.dart';
 
 enum MediaType { movie, tv }
 
@@ -37,23 +37,21 @@ class AccountApiClient {
     return result;
   }
 
-  Future<String> markAsFavorite({
+  Future<int> markAsFavorite({
     required int accountId,
     required String sessionId,
     required MediaType mediaType,
     required int mediaId,
     required bool isFavorite,
   }) async {
-    String parser(dynamic json) {
-      final jsonMap = json as Map<String, dynamic>;
-      final token = jsonMap['request_token'] as String;
-      return token;
+    int parser(dynamic json) {
+      return 1;
     }
 
     final parameters = <String, dynamic>{
       'media_type': mediaType.asString(),
-      'media_id': mediaId.toString(),
-      'favorite': isFavorite.toString(),
+      'media_id': mediaId,
+      'favorite': isFavorite,
     };
     final result = _networkClient.post(
       '/account/$accountId/favorite',

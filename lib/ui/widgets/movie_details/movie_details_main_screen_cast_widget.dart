@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/domain/api_client/image_downloader.dart';
-import 'package:flutter_application_2/ui/widgets/movie_details/movie_details_model.dart';
+import 'package:flutter_app_movie_db/domain/api_client/image_downloader.dart';
+import 'package:flutter_app_movie_db/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:provider/provider.dart';
 
 class MovieDetailsMainScreenCastWidget extends StatelessWidget {
@@ -17,11 +17,14 @@ class MovieDetailsMainScreenCastWidget extends StatelessWidget {
             padding: EdgeInsets.all(10.0),
             child: Text(
               'Series Cast',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
           const SizedBox(
-            height: 230,
+            height: 250,
             child: Scrollbar(
               child: _ActorListWidget(),
             ),
@@ -29,7 +32,9 @@ class MovieDetailsMainScreenCastWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(3.0),
             child: TextButton(
-                onPressed: () {}, child: const Text('Full Cast & Crew')),
+              onPressed: () {},
+              child: const Text('Full Cast & Crew'),
+            ),
           ),
         ],
       ),
@@ -38,22 +43,21 @@ class MovieDetailsMainScreenCastWidget extends StatelessWidget {
 }
 
 class _ActorListWidget extends StatelessWidget {
-  const _ActorListWidget({super.key});
+  const _ActorListWidget({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final movieDetails =
-        context.select((MovieDetailsModel model) => model.movieDetails);
-    final cast = movieDetails?.credits.crew.take(4).toList();
-    if (cast == null || cast.isEmpty) return const SizedBox.shrink();
+    var data =
+        context.select((MovieDetailsModel model) => model.data.actorsData);
+    if (data.isEmpty) return const SizedBox.shrink();
     return ListView.builder(
-      itemCount: 20,
-      itemExtent: 125,
+      itemCount: data.length,
+      itemExtent: 120,
       scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        return _ActorListItemWidget(
-          actorIndex: index,
-        );
+      itemBuilder: (BuildContext context, int index) {
+        return _ActorListItemWidget(actorIndex: index);
       },
     );
   }
@@ -61,13 +65,17 @@ class _ActorListWidget extends StatelessWidget {
 
 class _ActorListItemWidget extends StatelessWidget {
   final int actorIndex;
-  const _ActorListItemWidget({required this.actorIndex, super.key});
+  const _ActorListItemWidget({
+    super.key,
+    required this.actorIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
     final model = context.read<MovieDetailsModel>();
-    final actor = model.movieDetails!.credits.cast[actorIndex];
+    final actor = model.data.actorsData[actorIndex];
     final profilePath = actor.profilePath;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: DecoratedBox(
@@ -80,7 +88,7 @@ class _ActorListItemWidget extends StatelessWidget {
               color: Colors.black.withOpacity(0.1),
               blurRadius: 8,
               offset: const Offset(0, 2),
-            )
+            ),
           ],
         ),
         child: ClipRRect(
@@ -88,20 +96,32 @@ class _ActorListItemWidget extends StatelessWidget {
           clipBehavior: Clip.hardEdge,
           child: Column(
             children: [
-              profilePath != null
-                  ? Image.network(ImageDownloader.imageUrl(profilePath))
-                  : const SizedBox.shrink(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(actor.name, maxLines: 1),
-                    const SizedBox(height: 7),
-                    Text(actor.character, maxLines: 1),
-                  ],
+              if (profilePath != null)
+                Image.network(
+                  ImageDownloader.imageUrl(profilePath),
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.fitWidth,
                 ),
-              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        actor.name,
+                        maxLines: 1,
+                      ),
+                      const SizedBox(height: 7),
+                      Text(
+                        actor.character,
+                        maxLines: 2,
+                      ),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),

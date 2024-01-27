@@ -1,7 +1,7 @@
-import 'package:flutter_application_2/configuration.dart';
-import 'package:flutter_application_2/domain/api_client/network_client.dart';
-import 'package:flutter_application_2/domain/entity/movie_details.dart';
-import 'package:flutter_application_2/domain/entity/popular_movie_response.dart';
+import 'package:flutter_app_movie_db/configuration/configuration.dart';
+import 'package:flutter_app_movie_db/domain/api_client/network_client.dart';
+import 'package:flutter_app_movie_db/domain/entity/movie_details.dart';
+import 'package:flutter_app_movie_db/domain/entity/popular_movie_response.dart';
 
 class MovieApiClient {
   final _networkClient = NetworkClient();

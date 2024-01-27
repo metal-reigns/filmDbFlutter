@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/ui/navigation/main_navigation.dart';
-import 'package:flutter_application_2/ui/theme/app_colors.dart';
+import 'package:flutter_app_movie_db/ui/navigation/main_navigation.dart';
+import 'package:flutter_app_movie_db/ui/theme/app_colors.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatelessWidget {
-  // final MyAppModel model;
   static final mainNavigation = MainNavigation();
   const MyApp({super.key});
 
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: const [
         Locale('ru', 'RU'),
-        Locale('en', 'US'),
+        Locale('en', ''),
       ],
       routes: mainNavigation.routes,
       initialRoute: MainNavigationRouteNames.loaderWidget,

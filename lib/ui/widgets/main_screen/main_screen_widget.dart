@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_2/domain/data_provider/session_data_provider.dart';
-import 'package:flutter_application_2/domain/factories/screen_factory.dart';
+import 'package:flutter_app_movie_db/domain/factories/screen_factory.dart';
 
 class MainScreenWidget extends StatefulWidget {
   const MainScreenWidget({super.key});
@@ -24,10 +23,13 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TMDb'),
+        title: const Text(
+          'TMDB',
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
         actions: [
           IconButton(
-            onPressed: () => SessionDataProvider().deleteSessionId(),
+            onPressed: () {},
             icon: const Icon(Icons.search),
           )
         ],
@@ -35,21 +37,26 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       body: IndexedStack(
         index: _selectedTab,
         children: [
-          const Text(
-            'News',
-          ),
+          _screenFactory.makeNewsList(),
           _screenFactory.makeMovieList(),
-          const Text(
-            'Serials',
-          ),
+          _screenFactory.makeTWShowList(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'News'),
-          BottomNavigationBarItem(icon: Icon(Icons.movie), label: 'Films'),
-          BottomNavigationBarItem(icon: Icon(Icons.tv), label: 'Serials'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'News',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.movie_filter),
+            label: 'Films',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.tv),
+            label: 'Serials',
+          ),
         ],
         onTap: onSelectTab,
       ),
